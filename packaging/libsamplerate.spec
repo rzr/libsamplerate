@@ -25,7 +25,7 @@ Group:          System/Libraries
 Url:            http://www.mega-nerd.com/SRC/
 Source0:        http://www.mega-nerd.com/SRC/libsamplerate-%{version}.tar.gz
 Source1001:     libsamplerate.manifest
-BuildRequires:  pkgconfig(libsndfile)
+BuildRequires:  pkgconfig(sndfile)
 BuildRequires:  pkgconfig
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 # PATCH-FIX-UPSTREAM 0001-src-src_sinc.c-Fix-a-read-beyond-end-of-coefficent-a.patch off by one in src_sinc
@@ -59,7 +59,7 @@ down effects.
 
 %package devel
 Summary:        Include Files and Libraries mandatory for Development
-Group:          Development/Libraries/C and C++
+Group:          Development/Languages
 Requires:       glibc-devel
 Requires:       libsamplerate0 = %{version}
 
@@ -69,14 +69,13 @@ to develop applications that require these.
 
 %package progs
 Summary:        Example Programs for libsamplerate
-Group:          Productivity/Multimedia/Sound/Utilities
+Group:          Multimedia/Utilities
 
 %description progs
 This package includes the example programs for libsamplerate.
 
 %prep
 %setup -q
-#%patch -p1
 
 cp %{SOURCE1001} .
 
@@ -88,7 +87,6 @@ export CFLAGS="%optflags %cflags_profile_generate=$profiledir"
 %configure --disable-silent-rules --disable-static
 make %{?_smp_mflags}
 pushd tests
-make check
 popd
 make clean
 export CFLAGS="%optflags %cflags_profile_feedback=$profiledir"
@@ -115,7 +113,8 @@ rm -f %{buildroot}%{_libdir}/*.la
 
 %files -n libsamplerate0
 %defattr(-,root,root)
-%doc AUTHORS COPYING
+%doc AUTHORS
+%license COPYING
 %{_libdir}/libsamplerate.so.0*
 
 %files devel
